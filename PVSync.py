@@ -3,10 +3,8 @@
 #pylint: disable=W0141
 
 from ImgInfo import *
-import json
 import shutil
 import sys
-import sqlite3
 import time
 import datetime
 

@@ -3,11 +3,9 @@
 #pylint: disable=W0141
 
 import os
-import sys
 import exifread
 import hashlib
 import string
-import logging
 
 def FillFileInfo(fn, info=None):
     if info == None:
