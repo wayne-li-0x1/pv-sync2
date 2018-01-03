@@ -302,7 +302,7 @@ class PVSync:
                 self.mydb.Close(rollback=False)
                 sys.exit(5)
 
-            #return
+            return
 
         #copy the file
         self.stat_copied = self.stat_copied + 1
