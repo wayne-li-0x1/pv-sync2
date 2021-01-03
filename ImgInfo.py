@@ -26,8 +26,8 @@ def FillImgInfo(fn, info=None):
     fp = open(fn, 'rb')
     try:
         exif = exifread.process_file(fp)
-    except Exception, e:
-        print "Exif Read Error: " , e
+    except Exception as e:
+        print("Exif Read Error: " , e)
         return None
 
     try:
@@ -43,11 +43,14 @@ def FillImgInfo(fn, info=None):
         info["DeviceId"] = None
 
     dt = exif["EXIF DateTimeOriginal"].values
-    dt = dt.encode("utf-8")
+    if not dt:
+        fp.close()
+        return None
+
     year = dt.split(":")[0].strip()
     month = dt.split(":")[1].strip()
     #dt = dt.translate(None, ':')
-    tbl = string.maketrans(' :','-.')
+    tbl = str.maketrans(' :','-.')
     dt = dt.translate(tbl)
     info["PicTakenTime"]  = dt
     info["year"]  = year

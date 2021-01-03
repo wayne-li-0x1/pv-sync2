@@ -89,7 +89,7 @@ class MyDB:
 
     def CheckTables(self):
         tables = self.config["TABLES"]
-        for tblName,fieldsDef in tables.iteritems():
+        for tblName,fieldsDef in tables.items():
             self.CheckTable(tblName, fieldsDef)
         self.Close()
 
@@ -105,14 +105,14 @@ class MyDB:
     def genFieldsSql(self, fieldsDef, needType=True):
         if needType:
             return  ", ".join(map(lambda x:"%s %s" \
-                %(x.keys()[0], x.values()[0]), fieldsDef))
+                %(list(x.keys())[0], list(x.values())[0]), fieldsDef))
         else:
             return  ", ".join(map(lambda x:"%s" \
-                %(x.keys()[0]), fieldsDef))
+                %(list(x.keys())[0]), fieldsDef))
 
     def genSqlFilter(self, matchFldData):
         sqls = []
-        for k,v in matchFldData.iteritems():
+        for k,v in matchFldData.items():
             sql = "%s=%s"%(k,self.sqlVal(v))
             sqls.append(sql)
 
@@ -132,7 +132,7 @@ class MyDB:
         assert(isinstance(matchFldData, dict))
 
         sqlSet = ", ".join(map(lambda x:"%s=%s" \
-            %(x,self.sqlVal(fldsAndData[x])) , fldsAndData.keys()))
+            %(x,self.sqlVal(fldsAndData[x])) , list(fldsAndData.keys())))
         sql = "UPDATE %s SET %s WHERE %s"%(tblName, sqlSet
             , self.genSqlFilter(matchFldData))
         self.RunSQL(sql, disconn=disconn, commit=commit)
@@ -144,10 +144,10 @@ class MyDB:
             return "%f"%v
         elif isinstance(v, int):
             return "%d"%v
-        elif isinstance(v, long):
-            return "%d"%v
-        elif isinstance(v, unicode):
-            return "'%s'"%v.encode("utf-8")
+        #elif isinstance(v, long):
+        #    return "%d"%v
+        #elif isinstance(v, unicode):
+        #    return "'%s'"%v.encode("utf-8")
         else:
             return "'%s'"%v
 
@@ -157,12 +157,12 @@ class MyDB:
 
         fieldsDef = self.config["TABLES"][tblName]
 
-        if "INTEGER PRIMARY KEY" in fieldsDef[0].values()[0]:
+        if "INTEGER PRIMARY KEY" in list(fieldsDef[0].values())[0]:
             fieldsDef = fieldsDef[1:]
 
         if len(fieldsDef) != len(fldsData):
-            print fieldsDef
-            print fldsData
+            print(fieldsDef)
+            print(fldsData)
             raise MyError("插入数据个数同数据表定义不符")
 
         fldsDeclSql = self.genFieldsSql(fieldsDef, needType=False)
@@ -211,9 +211,9 @@ class MyDB:
         newFields = []
         assert(len(results) == 1)
         for fld in fieldsDef:
-            k = fld.keys()[0]
-            if not k in results[0].keys():
-                sql = "ALTER TABLE %s ADD %s %s" % (tblName, k, fld.values()[0])
+            k = list(fld.keys())[0]
+            if not k in list(results[0].keys()):
+                sql = "ALTER TABLE %s ADD %s %s" % (tblName, k, list(fld.values()[0]))
                 self.RunSQL(sql)
 
         return

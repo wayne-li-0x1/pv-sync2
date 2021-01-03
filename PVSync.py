@@ -36,7 +36,7 @@ class PVSync:
         return
 
     def print_stat(self, s):
-        print "%d scanned, %d exists, %d copied, %d registered. [ %s ] \r"%(self.stat_scanned, self.stat_exists, self.stat_copied, self.stat_registered,s),
+        print("%d scanned, %d exists, %d copied, %d registered. [ %s ] \r"%(self.stat_scanned, self.stat_exists, self.stat_copied, self.stat_registered,s))
 
         if self.stat_scanned%10 == 0:
             sys.stdout.flush()
@@ -52,6 +52,8 @@ class PVSync:
                     self.import_one_picture(fn, ".jpg")
                 elif fn.lower().endswith(('.png')):
                     self.import_one_picture(fn, ".png")
+                elif fn.lower().endswith(('.heic')):
+                    self.import_one_picture(fn, ".heic")
                 elif fn.lower().endswith(('.tif')):
                     self.import_one_picture(fn, ".tif")
                 elif fn.lower().endswith(('.mov')):
@@ -59,7 +61,7 @@ class PVSync:
                 else:
                     pass
 
-        print "\n"
+        print("\n")
         return
 
     def import_one_video(self, fn, suffix):
@@ -72,11 +74,12 @@ class PVSync:
                     #"st_atime":info["atime"],
                     "st_mtime":info["mtime"],
                     "st_ctime":info["ctime"],
-                    "from_abs_path":os.path.abspath(fn).encode("base64")
+                    "from_abs_path":os.path.abspath(fn)
                 }, disconn=False)
-        except Exception, e:  
-            print e
+        except Exception as e:  
+            print(e)
             self.mydb.Close(rollback=False)
+            assert 0
             sys.exit(6)
 
         if exist:
@@ -106,13 +109,14 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ info["size"], info["atime"]
                     , info["mtime"], info["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , info["md5"], newFn ], disconn=True, commit=True)
                 self.stat_registered = self.stat_registered + 1
                 self.print_stat("registering: %s"%newFnPath)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
+                assert 0
                 sys.exit(5)
 
             return
@@ -134,11 +138,12 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ info["size"], info["atime"]
                     , info["mtime"], info["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , info["md5"], newFn ], disconn=True, commit=True)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
+                assert 0
                 sys.exit(7)
 
 
@@ -154,10 +159,10 @@ class PVSync:
                     #"st_atime":imgInfo["atime"],
                     "st_mtime":imgInfo["mtime"],
                     "st_ctime":imgInfo["ctime"],
-                    "from_abs_path":os.path.abspath(fn).encode("base64")
+                    "from_abs_path":os.path.abspath(fn)
                 }, disconn=False)
-        except Exception, e:  
-            print e
+        except Exception as e:  
+            print(e)
             self.mydb.Close(rollback=False)
             sys.exit(6)
 
@@ -202,13 +207,14 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ imgInfo["size"], imgInfo["atime"]
                     , imgInfo["mtime"], imgInfo["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , imgInfo["md5"], newFn ], disconn=True, commit=True)
                 self.stat_registered = self.stat_registered + 1
                 self.print_stat("registering: %s"%newFnPath)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
+                assert 0
                 sys.exit(5)
 
             return
@@ -229,10 +235,10 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ imgInfo["size"], imgInfo["atime"]
                     , imgInfo["mtime"], imgInfo["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , imgInfo["md5"], newFn ], disconn=True, commit=True)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
                 sys.exit(7)
 
@@ -255,10 +261,10 @@ class PVSync:
                     #"st_atime":imgInfo["atime"],
                     "st_mtime":imgInfo["mtime"],
                     "st_ctime":imgInfo["ctime"],
-                    "from_abs_path":os.path.abspath(fn).encode("base64")
+                    "from_abs_path":os.path.abspath(fn)
                 }, disconn=False)
-        except Exception, e:  
-            print e
+        except Exception as e:  
+            print(e)
             self.mydb.Close(rollback=False)
             sys.exit(6)
 
@@ -293,16 +299,17 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ imgInfo["size"], imgInfo["atime"]
                     , imgInfo["mtime"], imgInfo["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , imgInfo["md5"], newFn ], disconn=True, commit=True)
                 self.stat_registered = self.stat_registered + 1
                 self.print_stat("registering: %s"%newFnPath)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
+                assert 0
                 sys.exit(5)
 
-            return
+            #return
 
         #copy the file
         self.stat_copied = self.stat_copied + 1
@@ -320,10 +327,10 @@ class PVSync:
             try:
                 self.mydb.Insert("TblFile", [ imgInfo["size"], imgInfo["atime"]
                     , imgInfo["mtime"], imgInfo["ctime"]
-                    , os.path.abspath(fn).encode("base64")
+                    , os.path.abspath(fn)
                     , imgInfo["md5"], newFn ], disconn=True, commit=True)
-            except Exception, e:  
-                print e
+            except Exception as e:  
+                print(e)
                 self.mydb.Close(rollback=False)
                 sys.exit(7)
 

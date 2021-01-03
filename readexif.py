@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #-*-coding: utf-8 -*-
 #pylint: disable=W0141
 
@@ -15,4 +15,4 @@ exif = exifread.process_file(fp)
 fp.close()
 #print exif
 
-print exif["Image Orientation"].values
+print(exif)
